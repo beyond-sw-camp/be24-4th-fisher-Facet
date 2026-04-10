@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+  namespace: default
+data:
+  AES_KEY: aessecr - 생략됨
+  AWS_ACCESS_KEY: AKIAZ6ML - 생략됨
+  AWS_SECRET_KEY: OQ22rka- 생략됨
+  DB_PASS: qwer - 생략됨
+  DB_URL: jdbc:mariadb://db-service:3306/facet
+  DB_USER: root
+  GOOGLE_CLIENT_ID: 951644948295 - 생략됨
+  GOOGLE_CLIENT_SECRET: GOCSPX-j-uqR - 생략됨
+  GOOGLE_REDIRECT_URI: https://www.facet7.kro.kr/api/login/oauth2/code/google
+  JWT_EXPIRE: '300000000'
+  JWT_SECRET: sdfkhgsdkglnh - 생략됨
+  KAKAO_CLIENT_ID: f3c4b83f - 생략됨
+  KAKAO_CLIENT_SECRET: 7zgfNL - 생략됨
+  KAKAO_REDIRECT_URI: http://www.facet7.kro.kr/api/login/oauth2/code/kakao
+  MAIL_ADDR:  - 생략됨
+  MAIL_PASS: - 생략됨
+  PORTONE_SECRET: >-
+    8f5wj - 생략됨
+  SSL_KEY_PASSWORD: qwer - 생략됨
+  UPLOAD_PATH: UPLOAD_PATH

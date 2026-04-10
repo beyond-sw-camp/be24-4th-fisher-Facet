@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: default
+data:
+  # 프론트엔드 환경 변수 (Vite 기반)
+  VITE_BACKEND_URL: "https://www.facet7.kro.kr/api"
+  VITE_PAYMENT_CHANNELKEY: "chan - 생략됨"
+  VITE_PAYMENT_STOREID: "store-- 생략됨"
+
+  # Nginx 서버 설정 파일
+  default.conf: |
+    server {
+        listen 80;
+        server_name www.facet7.kro.kr;
+        
+        root /usr/share/nginx/html;
+        index index.html;
+
+        location / {
+            # React/Vue 라우팅을 위해 파일이 없으면 index.html로 보냅니다.
+            try_files $uri $uri/ /index.html;
+        }
+    }
+
+  # SSL/TLS 인증서 (ZeroSSL 발급)
+  fullchain.crt: |
+    -----BEGIN CERTIFICATE-----
+    MIIGZzCCBE+gAwIBAgIQdjC1TMKVKs/oSve+HC95eTANBgkqhkiG9w0BAQwFADBL
+    MQswCQYDVQQGEwJBVDEQMA4GA1UEChMHWmVyb1NTTDEqMCgGA1UEAxMhWmVyb1NT
+    --- 생략됨 ---
+
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIG1TCCBL2gAwIBAgIQbFWr29AHksedBwzYEZ7WvzANBgkqhkiG9w0BAQwFADCB
+    iDELMAkGA1UEBhMCVVMxEzARBgNVBAgTCk5ldyBKZXJzZXkxFDASBgNVBAcTC0pl
+    --- 생략됨 ---
+    -----END CERTIFICATE-----
+  private.key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEogIBAAKCAQEAjY2vhe37c2FgXiU5OBy1aeJl7ix7nfoZUQoRCIzYc0ySdE/l
+    m4Gb8ZJ9zvNmYa0DiK++ZZMrPrwgwR2kw+pXHnQMkp8DwaxTZRK+dWtTu4y8sH07
+    --- 생략됨 ---
+    -----END RSA PRIVATE KEY-----
