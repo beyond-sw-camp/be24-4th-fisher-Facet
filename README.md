@@ -42,7 +42,7 @@
 <details>
 <summary>📑 요구사항 명세서 이미지 보기</summary><br>
 
-* [요구사항 명세서 PDF](./API정의서.pdf)
+* [요구사항 명세서 PDF](docs/3팀 요구사항 정의서.pdf)
 
 [Swagger 요구사항 명세서](https://api.facet7.kro.kr:442/swagger-ui/index.html)
 
