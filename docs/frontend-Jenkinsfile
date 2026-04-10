@@ -1,0 +1,111 @@
+pipeline {
+  agent {
+    kubernetes {
+      label "node-kaniko-${UUID.randomUUID().toString()}"
+      defaultContainer 'node'
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  restartPolicy: Never
+  containers:
+    - name: node
+      image: node:22.17.1-bullseye
+      command: ['cat']
+      tty: true
+      resources:
+        requests:
+          memory: "512Mi"
+          cpu: "200m"
+        limits:
+          memory: "1024Mi"
+          cpu: "500m"
+      volumeMounts:             
+        - name: workspace       
+          mountPath: /workspace 
+    
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:debug
+      command: ['/busybox/sh','-c','sleep infinity']
+      tty: true
+      resources:
+        requests:
+          memory: "1Gi"  # Kaniko는 빌드 시 메모리를 많이 먹습니다.
+          cpu: "500m"
+        limits:
+          memory: "1280Mi"
+          cpu: "1000m"
+      volumeMounts:
+        - name: docker-config
+          mountPath: /kaniko/.docker
+        - name: workspace
+          mountPath: /workspace
+      
+  volumes:
+    - name: workspace
+      emptyDir: {}
+    - name: docker-config
+      secret:
+        secretName: dockerhub-front
+        items:
+          - key: .dockerconfigjson
+            path: config.json
+"""
+    }
+  }
+
+  environment {
+    IMAGE_NAME = 'dwg0245/front_facet'
+    IMAGE_TAG  = "${env.BUILD_NUMBER}"
+    NAMESPACE = "default"
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        container('node') {
+          checkout([$class: 'GitSCM',
+            branches: [[name: '*/main']],
+            userRemoteConfigs: [[url: 'https://github.com/dwg0245/be24-2nd-fisher-Facet']]
+          ])
+        }
+      }
+    }
+
+    stage('Gradle Build') {
+      steps {
+        container('node') {
+          sh '''
+            cd vue
+            npm i
+            npm run build
+          '''
+        }
+      }
+    }
+
+    stage('Kaniko Build & Push') {
+      steps {
+        container('kaniko') {
+          sh """
+            /kaniko/executor \
+              --context=${WORKSPACE}/vue \
+              --dockerfile=${WORKSPACE}/vue/Dockerfile \
+              --destination=${IMAGE_NAME}:${IMAGE_TAG} \
+              --destination=${IMAGE_NAME}:latest \
+              --single-snapshot \
+              --use-new-run \
+              --cache=true \
+              --snapshotMode=redo
+          """
+        }
+      }
+    }
+
+    stage('Result') {
+      steps {
+        echo "Pushed: ${IMAGE_NAME}:${IMAGE_TAG}"
+      }
+    }  
+  }
+}
+
