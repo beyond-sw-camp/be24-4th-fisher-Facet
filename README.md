@@ -42,7 +42,7 @@
 <details>
 <summary>📑 요구사항 명세서 이미지 보기</summary><br>
 
-* [요구사항 명세서 PDF](./API정의서.pdf)
+* [요구사항 명세서 PDF](docs/3팀%20요구사항%20정의서.pdf)
 
 [Swagger 요구사항 명세서](https://api.facet7.kro.kr:442/swagger-ui/index.html)
 
@@ -74,7 +74,7 @@
 > 트래픽을 안정적으로 처리하고, 실시간 경매의 동시성 문제를 해결하기 위해 아래와 같은 아키텍처로 설계되었습니다.
 
 <div style="text-align: center;">
-  <img src="./img/3팀 시스템 아키텍처 수정본.png" width="85%">
+  <img src="docs/3팀 시스템 아키텍처 수정본.png" width="85%">
 </div>
 
 ## 📋 5. 상세 기능 (Detailed Features)
